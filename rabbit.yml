@@ -1,0 +1,20 @@
+---
+- hosts: one
+  tasks:
+    - name: install package
+      apt: name=rabbitmq-server  state=present
+      when: ansible_os_family == 'Debian'
+      tags: a
+
+    - name: add user
+      rabbitmq_user:
+        user: openstack
+        password: openstack    
+        permissions: 
+          - vhost: /
+            configure_priv: .*
+            read_priv: .*
+            write_priv: .*
+        state: present
+        force: yes
+      tags: b
